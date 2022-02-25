@@ -20,5 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "twitter_cldr", "~> 6.0"
   spec.add_development_dependency "bundler", "~> 2.2"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "~> 13.0"
 end
