@@ -1,0 +1,31 @@
+PATH
+  remote: .
+  specs:
+    message_format (0.0.8)
+      twitter_cldr (~> 6.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    camertron-eprun (1.1.1)
+    cldr-plurals-runtime-rb (1.1.0)
+    concurrent-ruby (1.1.9)
+    rake (13.0.6)
+    twitter_cldr (6.11.2)
+      camertron-eprun
+      cldr-plurals-runtime-rb (~> 1.1)
+      tzinfo
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
+
+PLATFORMS
+  x86_64-darwin-20
+  x86_64-linux
+
+DEPENDENCIES
+  bundler (~> 2.2)
+  message_format!
+  rake (~> 13.0)
+
+BUNDLED WITH
+   2.2.32
