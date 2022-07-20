@@ -12,7 +12,7 @@ describe MessageFormat do
       expect { MessageFormat.new('sub with no selector { a, select, {hi} }') }.to raise_error
       expect { MessageFormat.new('sub with no other { a, select, foo {hi} }') }.to raise_error
       expect { MessageFormat.new('wrong escape \\{') }.to raise_error
-      expect { MessageFormat.new('wrong escape \'{\'', 'en', { escape: '\\' }) }.to raise_error
+      expect { MessageFormat.new('wrong escape \'{\'', 'en', false, { escape: '\\' }) }.to raise_error
       expect { MessageFormat.new('bad arg type { a, bogus, nope }') }.to raise_error
       expect { MessageFormat.new('bad arg separator { a bogus, nope }') }.to raise_error
     end
