@@ -22,8 +22,8 @@ module MessageFormat
 
   class << self
 
-    def new ( pattern, locale=nil )
-      MessageFormat.new(pattern, locale)
+    def new ( pattern, locale=nil, require_all_args=false)
+      MessageFormat.new(pattern, locale, require_all_args)
     end
 
     def format_message ( pattern, args=nil, locale=nil )
