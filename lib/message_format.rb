@@ -6,12 +6,12 @@ require_relative 'message_format/interpreter'
 module MessageFormat
   class MessageFormat
 
-    def initialize ( pattern, locale=nil )
+    def initialize ( pattern, locale=nil, require_all_args=false)
       @locale = (locale || TwitterCldr.locale).to_sym
       @format = Interpreter.interpret(
         Parser.parse(pattern),
-        { :locale => @locale }
-      )
+        { :locale => @locale, :require_all_args => require_all_args },
+        )
     end
 
     def format ( args=nil )

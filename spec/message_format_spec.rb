@@ -61,7 +61,7 @@ describe MessageFormat do
             =1 {drove himself.}
          other {drove # people.}}'
       message = MessageFormat.new(pattern, 'en-US')
-          .format({ :takenDate => DateTime.now, :name => 'Bob', :numPeople => 5 })
+                             .format({ :takenDate => DateTime.now, :name => 'Bob', :numPeople => 5 })
 
       expect(message).to match(/^On \d\d?\/\d\d?\/\d{2,4} Bob drove 4 people.$/)
     end
@@ -106,13 +106,69 @@ describe MessageFormat do
          female {it\'s her turn}
           other {it\'s their turn}}'
       message = MessageFormat.new(pattern, 'en-US')
-          .format({ gender: 'female' })
+                             .format({ gender: 'female' })
 
       expect(message).to eql('it\'s her turn')
     end
 
     it 'should throw an error when args are expected and not passed' do
       expect { MessageFormat.new('{a}').format() }.to raise_error
+    end
+
+    it 'partially-missing args - formats numbers, dates, and times' do
+      pattern = '{ n, number } : { d, date, short } { d, time, short }'
+      message = MessageFormat.new(pattern, 'en-US').format({:n => 0})
+      expect(message).to eql('0 :  ')
+
+      expect{MessageFormat.new(pattern, 'en-US', true).format({:n => 0})}.to raise_error
+    end
+
+    it 'formats integer number' do
+      pattern = '{ n, number, integer }'
+      message = MessageFormat.new(pattern, 'en-US').format({})
+      expect(message).to eql('')
+
+      expect{MessageFormat.new(pattern, 'en-US', true).format({})}.to raise_error
+    end
+
+    it 'partially-missing args - handles plurals' do
+      pattern =
+        'On {takenDate, date, short} {name} {numPeople, plural, offset:1
+            =0 {didn\'t carpool.}
+            =1 {drove himself.}
+         other {drove # people.}}'
+      message = MessageFormat.new(pattern, 'en-US')
+                             .format({ :takenDate => DateTime.now, :name => 'Bob'})
+      expect(message).to match(/^On \d\d?\/\d\d?\/\d{2,4} Bob $/)
+
+      expect{MessageFormat.new(pattern, 'en-US', true).format({})}.to raise_error
+    end
+
+    it 'partially-missing args - handles selectordinals' do
+      pattern =
+        '{n, selectordinal,
+           one {#st}
+           two {#nd}
+           few {#rd}
+         other {#th}}'
+      expect(MessageFormat.new(pattern, 'en').format({})).to eql('')
+      expect{MessageFormat.new(pattern, 'en', true).format({})}.to raise_error
+    end
+
+    it 'partially-missing args - handle simple' do
+      expect { MessageFormat.new('{a}', nil, true).format({})}.to raise_error
+      expect(MessageFormat.new('{a}', nil).format({})).to eql('')
+    end
+
+    it 'partially-missing args - handle select' do
+      pattern =
+        '{ gender, select,
+           male {it\'s his turn}
+         female {it\'s her turn}
+          other {it\'s their turn}}'
+      expect { MessageFormat.new(pattern, 'en-US', true)
+                            .format({ some_other_arg: 'aaa' })}.to raise_error
+      expect(MessageFormat.new(pattern, 'en-US').format({})).to eql('')
     end
   end
 
@@ -124,16 +180,16 @@ describe MessageFormat do
             =1 {drove himself.}
          other {drove # people.}}'
       message = MessageFormat.format_message(pattern,
-        :takenDate => DateTime.now,
-        :name => 'Bob',
-        :numPeople => 5
+                                             :takenDate => DateTime.now,
+                                             :name => 'Bob',
+                                             :numPeople => 5
       )
       expect(message).to match(/^On \d\d?\/\d\d?\/\d{2,4} Bob drove 4 people.$/)
 
       message = MessageFormat::format_message(pattern,
-        :takenDate => DateTime.now,
-        :name => 'Bill',
-        :numPeople => 6
+                                              :takenDate => DateTime.now,
+                                              :name => 'Bill',
+                                              :numPeople => 6
       )
       expect(message).to match(/^On \d\d?\/\d\d?\/\d{2,4} Bill drove 5 people.$/)
     end
